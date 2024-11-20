@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XPath Practice Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+        th,
+        td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>XPath Practice Tables</h1>
+
+    <!-- Static Table -->
+    <h2>Static Table</h2>
+    <table id="static-table">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Country</th>
+        </tr>
+        <tr>
+            <td>John</td>
+            <td>28</td>
+            <td>USA</td>
+        </tr>
+        <tr>
+            <td>Alice</td>
+            <td>24</td>
+            <td>Canada</td>
+        </tr>
+        <tr>
+            <td>Mark</td>
+            <td>32</td>
+            <td>UK</td>
+        </tr>
+    </table>
+
+    <!-- Dynamic Table -->
+    <h2>Dynamic Table (Randomized Content)</h2>
+    <table id="dynamic-table">
+        <tr>
+            <th>ID</th>
+            <th>Product</th>
+            <th>Price ($)</th>
+        </tr>
+    </table>
+    <script>
+        // Populate the Dynamic Table with Random Content
+        const products = ["Laptop", "Phone", "Tablet", "Headphones", "Camera"];
+        const dynamicTable = document.getElementById("dynamic-table");
+
+        for (let i = 0; i < 5; i++) {
+            const row = dynamicTable.insertRow();
+            const cell1 = row.insertCell(0);
+            const cell2 = row.insertCell(1);
+            const cell3 = row.insertCell(2);
+            cell1.textContent = Math.floor(Math.random() * 1000); // Random ID
+            cell2.textContent = products[Math.floor(Math.random() * products.length)];
+            cell3.textContent = (Math.random() * 500).toFixed(2); // Random Price
+        }
+    </script>
+
+    <!-- Paginated Table -->
+    <h2>Paginated Table</h2>
+    <table id="paginated-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Total ($)</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div class="pagination">
+        <button onclick="prevPage()">Previous</button>
+        <button onclick="nextPage()">Next</button>
+    </div>
+    <script>
+        // Sample Data for Pagination
+        const orders = Array.from({ length: 30 }, (_, i) => ({
+            id: i + 1,
+            customer: `Customer ${i + 1}`,
+            total: (Math.random() * 100).toFixed(2)
+        }));
+        const rowsPerPage = 5;
+        let currentPage = 1;
+
+        // Function to Render the Paginated Table
+        function renderTable(page) {
+            const tbody = document.querySelector("#paginated-table tbody");
+            tbody.innerHTML = ""; // Clear existing rows
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const rows = orders.slice(start, end);
+
+            rows.forEach(order => {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = order.id;
+                row.insertCell(1).textContent = order.customer;
+                row.insertCell(2).textContent = order.total;
+            });
+        }
+
+        // Pagination Controls
+        function nextPage() {
+            if (currentPage * rowsPerPage < orders.length) {
+                currentPage++;
+                renderTable(currentPage);
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable(currentPage);
+            }
+        }
+
+        // Initial Render
+        renderTable(currentPage);
+    </script>
+</body>
+
+</html>
